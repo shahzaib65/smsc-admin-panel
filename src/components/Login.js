@@ -85,7 +85,7 @@ const Login = () => {
               {error && <p className="text-red-500">{error || error.message}</p>}
             </div>
 
-            <Link to="/">
+            <Link to="/home">
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-[#ff5757] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#ff5757] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff5757]"
