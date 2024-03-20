@@ -5,6 +5,7 @@ import { LiaToolsSolid } from "react-icons/lia"
 import { IoSettingsSharp } from "react-icons/io5"
 import { FaArrowRight } from "react-icons/fa"
 import { motion } from "framer-motion"
+import { Link } from 'react-router-dom';
 
 const variants = {
     expanded: { width: "20%" },
@@ -12,25 +13,35 @@ const variants = {
 }
 
 const navItems = [
-    {
+    {   
+        "id": "0",
         name: "Dashboard",
-        icon: MdDashboard
+        icon: MdDashboard,
+        link: "/home"
     },
     {
+        "id": "1",
         name: "Analytics",
-        icon: SiSimpleanalytics
+        icon: SiSimpleanalytics,
+        link:"/home"
     },
     {
+        "id": "2",
         name: "Message",
-        icon: MdOutlineMessage
+        icon: MdOutlineMessage,
+        link:"/message"
     },
     {
+        "id": "3",
         name: "Tools",
-        icon: LiaToolsSolid
+        icon: LiaToolsSolid,
+        link: "/home"
     },
     {
+        "id": "4",
         name: "Settings",
-        icon: IoSettingsSharp
+        icon: IoSettingsSharp,
+        link: "/home"
     },
 ]
 
@@ -38,7 +49,6 @@ const Sidebar = () => {
 
     const [activeNavIndex, setActiveNavIndex] = useState(0);
     const [isExpanded, setIsExpanded] = useState(true);
-
     useEffect(() => {
 
         const handleResize = () => {
@@ -76,13 +86,18 @@ const Sidebar = () => {
 
                 <div id='navlinks-box' className='flex flex-col justify-center items-start gap-5 w-full mt-5'>
                     {navItems.map((item, index) => (
-                        <div key={item.name} id='link-box' className={'flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl ' + (activeNavIndex === index ? 'bg-[#ff5757] text-white ' : 'text-black ') + (isExpanded ? 'px-6 py-2 ' : 'p-2 ')} onClick={() => setActiveNavIndex(index)}>
+                        <Link 
+                        id={item.id}
+                        to={item.link}
+                         key={item.name}
+                         
+                          className={'flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl ' + (activeNavIndex === index ? 'bg-[#ff5757] text-white ' : 'text-black ') + (isExpanded ? 'px-6 py-2 ' : 'p-2 ')} onClick={() => setActiveNavIndex(index)}>
                             <div className='bg-[#ff5757] text-white p-2 rounded-full'>
                                 <item.icon className='md:w-6 w-4 h-4 md:h-6' />
                             </div>
 
                             <span className={'text-lg ' + (isExpanded ? 'flex' : 'hidden')}>{item?.name}</span>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
