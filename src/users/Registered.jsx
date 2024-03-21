@@ -1,41 +1,40 @@
-import React,{useState,useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdOutlineMessage, MdLogout } from 'react-icons/md'
 import { BsPersonVcardFill } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa"
 import { motion } from "framer-motion"
 import { Link } from 'react-router-dom';
-import Header from './components/Header'
+import Header from '../components/Header';
 import DataTable from "react-data-table-component";
-import axios from 'axios';
+import axios from "axios"
 import moment from "moment"
 
-
-const Message = () => {
-
-  const variants = {
+const variants = {
     expanded: { width: "20%" },
     nonExpanded: { width: "5%" }
 }
 
 const navItems = [
     {   
-         "id": "0",
+       id: "0",
         name: "Message",
         icon: MdOutlineMessage,
         link: "/message"
     },
-    {
-       "id": "1",
+    {   
+        "id": "1",
         name: "Registered users",
         icon: BsPersonVcardFill,
         link:"/register"
     }
 ]
 
- const [activeNavIndex, setActiveNavIndex] = useState(0);
+const Registered = () => {
+
+  const [activeNavIndex, setActiveNavIndex] = useState(1);
     const [isExpanded, setIsExpanded] = useState(true);
-    const [buttonText, setButtonText] = useState('Send Message');
     useEffect(() => {
+
         const handleResize = () => {
             const width = window.innerWidth;
             if (width <= 768) {
@@ -46,39 +45,21 @@ const navItems = [
                 setIsExpanded(true);
             }
         };
+
         handleResize();
+
         window.addEventListener('resize', handleResize);
+
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
     useEffect(()=>{
-      getMessage()
-    },[]);
+      usersList();
+    },[])
 
-  const [selectedOption, setSelectedOption] = useState(0);
-  const [senderID, setSenderID] = useState(null);
-  const [content, setContent] = useState(null);
-
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
-
-   const handleInput = (event) => {
-    setSenderID(event.target.value);
-  };
-
-   const handleContent = (event) => {
-    setContent(event.target.value);
-  };
-
-  useEffect(()=>{
-    usersList();
-  },[]);
-
-  const[users,setUsers] = useState([])
+    const[users,setUsers] = useState([])
   const usersList = () => {
     axios.get("https://agile-sweatshirt-ox.cyclic.app/api/user/fetch")
     .then((data)=>{
@@ -89,74 +70,33 @@ const navItems = [
     })
   }
 
-   const sendMessage = (senderID,content,phone_number) => {
-    console.log(phone_number,senderID,content)
-    axios.get(`http://164.52.219.194/api/v2/SendSMS?ApiKey=uie5FZjGcFWUtx438oHfjUph+HV/JcYNGykzc0zuwfc=&ClientId=b98f6521-2913-4095-95e1-7971dadc0d2b&SenderId=${senderID}&Message=${content}&MobileNumbers=${phone_number}&Is_Unicode=false&Is_Flash=false`)
-    .then((response)=>{
-      setButtonText("Send Message")
-      setContent('')
-      setSenderID('')
-      setSelectedOption(0)
-      saveMessage(senderID,content,phone_number);
-    }).catch((err)=>{
-      console.log(err.message);
-    })
-   };
-
-
-   const saveMessage = async(phone_number,senderID,content)=>{
-    const data = {
-      "phone_number": phone_number,
-      "senderID": senderID,
-      "content": content,
-      "delivered": "Delivered"
-    }
-    axios.post("https://agile-sweatshirt-ox.cyclic.app/api/admin/message/register",data)
-    .then((data)=>{
-         getMessage();
-    })
-    .catch((err)=>{
-      console.log(err.message)
-    })
-   }
-
-   const[messages,setMessages] = useState([])
-   const getMessage = async()=>{
-    axios.get("https://agile-sweatshirt-ox.cyclic.app/api/admin/message/fetch")
-    .then((response)=>{
-      setMessages(response.data.data);
-    }).catch((err)=>{
-      console.log(err.message)
-    })
-   }
-
- 
 
   const columns = [
     {
-      name: "Date",
+      name: "Registered Date",
       selector: (row) => `${moment(row.createAt).format("DD-MM-YYYY")}`
     },
     {
-         name: "DLR/Status",
-      selector: (row) => `${row.delivered}`
-    },
-    {
-         name: "SenderID",
-      selector: (row) => `${row.senderID}`
-    },
-    {
-         name: "Content",
-      selector: (row) => `${row.content}`
-    },
-     {
-         name: "Phone/SMSC",
+      name: "Phone",
       selector: (row) => `${row.phone_number}`
     },
-     {
-         name: "Delay",
-      selector: (row) => `2 s`
+    {
+         name: "Country",
+      selector: (row) => `SA`
     },
+    {
+         name: "Balance",
+      selector: (row) => `0`
+    },
+    {
+         name: "Received Messages",
+      selector: (row) => `0`
+    },
+     {
+         name: "Email",
+      selector: (row) => `${row.paypal_email}`
+    }
+     
     
 
   ];
@@ -200,14 +140,17 @@ const navItems = [
     },
   };
 
-return (
+
+  return (
  
     <main className='w-full bg-slate-200 h-screen flex justify-between items-start'>
-   <motion.section
+      <motion.section
             animate={isExpanded ? "expanded" : "nonExpanded"}
             variants={variants}
+
             className={'w-1/5 bg-white h-screen flex flex-col justify-between items-center gap-10 relative border-slate-100 border-r ' + (isExpanded ? 'py-8 px-6 ' : 'px-8 py-6')}
         >
+
             <div className='flex flex-col justify-center items-center gap-8'>
                 {isExpanded ? (<div id='logo-box'>
                     <img src='/app_logo.png' className='w-auto h-auto'  />
@@ -248,72 +191,26 @@ return (
             </div>
 
         </motion.section>
-   
 
-   <section className='w-4/5 grow bg-white h-screen overflow-y-auto flex flex-col justify-start items-center gap-2 p-4'>
-    <Header/>
+ <section className='w-4/5 grow bg-white h-screen overflow-y-auto flex flex-col justify-start items-center gap-2 p-4'>
+<Header/>
 
-    <div id='main-section' className='w-full h-auto mt-5 gap-4 bg-slate-100 rounded-xl p-5 flex flex-col'>
-<div className=' grid lg:grid-cols-2 grid-cols-1 gap-3 '>
-
-     <div className=' flex flex-col gap-3 '>
-      <h1 className='text-lg text-black font-semibold'>Sender ID</h1>
-      <input className='focus:ring-1 focus:ring-inset focus:ring-black outline-none rounded-xl border-0' id="dropdown" value={senderID} onChange={handleInput}>
-        
-      </input>
-
-     </div>
-
-    
-     
-<div className=' flex flex-col gap-3 '>
-      <h1 className='text-lg text-black font-semibold'> Mobile Number</h1>
-      <select className='focus:ring-1 focus:ring-inset focus:ring-black outline-none rounded-xl border-0' value={selectedOption} onChange={handleChange}>
-      <option value="default">Select phone number</option>
-         {users.map(item => (
-          <option key={item._id} value={item._phone_number}>{item.phone_number}</option>
-        ))}
-      </select>
-
-     </div>
-
-    </div>
-
-<div className='flex flex-col lg:w-1/2 w-full '>
-   <h1 className='text-lg text-black font-semibold'>Text/Content</h1>
-    <textarea value={content} onChange={handleContent} className='focus:ring-1 focus:ring-inset focus:ring-white outline-none rounded-xl border-0' placeholder=''></textarea>
-   </div>
-
-  <div className=' w-full h-auto flex justify-end items-end'>
-<button
-               type='submit'
-                className="flex lg:w-auto w-full justify-center rounded-md bg-[#ff5757] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#ff5757] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff5757]"
-                onClick={()=>{
-                  sendMessage(senderID,content,selectedOption);
-                  setButtonText('Sending message')
-                  }}
-              >
-                {buttonText}
-              </button>
-    </div>
-
-
-    </div>
-
-    <div className='w-full h-auto mt-5 gap-4 bg-slate-100 rounded-xl p-5 flex flex-col'>
+   <div className='w-full h-auto mt-5 gap-4 bg-slate-100 rounded-xl p-5 flex flex-col'>
 <DataTable
           columns={columns}
           fixedHeader
           pagination
-          data={messages}
+          data={users}
           customStyles={customStyles}
         />
     </div>
 
-   </section>
-  
+       </section>
+
     </main>
+
+      
   )
 }
 
-export default Message
+export default Registered

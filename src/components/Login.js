@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios"
 const Login = () => {
  const {
     register,
@@ -9,8 +10,31 @@ const Login = () => {
   } = useForm();
 
   const [error, setError] = useState('');
+  const[buttonText,setButtonText] = useState('Login')
 
    let navigate = useNavigate();
+
+
+   const login = async(email,password)=>{
+
+    const data = {
+       "email": email,
+       "password": password
+    }
+    axios.post("https://agile-sweatshirt-ox.cyclic.app/api/admin/message/login",data)
+    .then((response)=>{
+      if(response.data.error === false){
+         navigate("/message")
+         setButtonText('Login')
+      }
+       else{
+        setButtonText('Login')
+        setError("Please enter correct credentials")
+       }
+    }).catch((err)=>{
+      console.log(err.message)
+    })
+   }
 
   return (
      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -29,7 +53,8 @@ const Login = () => {
           <form
             noValidate
             onSubmit={handleSubmit((data) => {
-             
+           setButtonText('checking...')
+             login(data.email,data.password)
             })}
             className="space-y-6"
           >
@@ -85,14 +110,14 @@ const Login = () => {
               {error && <p className="text-red-500">{error || error.message}</p>}
             </div>
 
-            <Link to="/home">
+            <>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-[#ff5757] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#ff5757] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff5757]"
+                className="flex w-full mt-6 justify-center rounded-md bg-[#ff5757] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#ff5757] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff5757]"
               >
-                Log in
+                {buttonText}
               </button>
-            </Link>
+            </>
           </form>
 
         
