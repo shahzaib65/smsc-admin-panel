@@ -90,7 +90,7 @@ const navItems = [
   }
 
    const sendMessage = (senderID,content,phone_number) => {
-    console.log(phone_number,senderID,content)
+  
     axios.get(`http://164.52.219.194/api/v2/SendSMS?ApiKey=uie5FZjGcFWUtx438oHfjUph+HV/JcYNGykzc0zuwfc=&ClientId=b98f6521-2913-4095-95e1-7971dadc0d2b&SenderId=${senderID}&Message=${content}&MobileNumbers=${phone_number}&Is_Unicode=false&Is_Flash=false`)
     .then((response)=>{
       setButtonText("Send Message")
@@ -104,11 +104,12 @@ const navItems = [
    };
 
 
-   const saveMessage = async(phone_number,senderID,content)=>{
+   const saveMessage = async(senderID,content,phone_number)=>{
     const data = {
-      "phone_number": phone_number,
-      "senderID": senderID,
+       "senderID": senderID,
       "content": content,
+      "phone_number": phone_number,
+     
       "delivered": "Delivered"
     }
     axios.post("https://agile-sweatshirt-ox.cyclic.app/api/admin/message/register",data)
