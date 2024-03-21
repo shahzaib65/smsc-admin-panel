@@ -91,7 +91,7 @@ const navItems = [
 
    const sendMessage = (senderID,content,phone_number) => {
   
-    axios.get(`http://164.52.219.194/api/v2/SendSMS?ApiKey=uie5FZjGcFWUtx438oHfjUph+HV/JcYNGykzc0zuwfc=&ClientId=b98f6521-2913-4095-95e1-7971dadc0d2b&SenderId=${senderID}&Message=${content}&MobileNumbers=${phone_number}&Is_Unicode=false&Is_Flash=false`)
+    axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${content}`)
     .then((response)=>{
       setButtonText("Send Message")
       setContent('')
