@@ -167,7 +167,7 @@ const navItems = [
   const columns = [
     {
       name: "Date",
-      selector: (row) => `${moment(row.updatedAt).format("DD-MM-YYYY")}`
+      selector: (row) => `${moment(row.createdAt).format("DD-MM-YYYY")}`
     },
     {
          name: "DLR/Status",
@@ -191,7 +191,7 @@ const navItems = [
     },
     {
          name: "Received time",
-      selector: (row) => `${moment(row.time).format("DD-MM-YYYY")}`
+      selector: (row) => `${moment(row.updatedAt).format("DD-MM-YYYY")}`
     },
      {
          name: "Received message",
