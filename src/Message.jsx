@@ -189,10 +189,10 @@ const navItems = [
          name: "Service Center",
       selector: (row) => `${row.service_center_address}`
     },
-    {
-         name: "Received time",
-      selector: (row) => `${moment(row.updatedAt).format("DD-MM-YYYY")}`
-    },
+    // {
+    //      name: "Received time",
+    //   selector: (row) => `${moment(row.updatedAt).format("DD-MM-YYYY")}`
+    // },
      {
          name: "Received message",
       selector: (row) => `${row.message_body}`
