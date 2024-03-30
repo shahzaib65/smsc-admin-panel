@@ -29,6 +29,12 @@ const navItems = [
         name: "Registered users",
         icon: BsPersonVcardFill,
         link:"/register"
+    },
+     {
+       "id": "2",
+        name: "Received messages",
+        icon: MdOutlineMessage,
+        link:"/received"
     }
 ]
 

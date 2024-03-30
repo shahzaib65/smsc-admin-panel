@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React,{useState,useEffect} from 'react'
 import { MdOutlineMessage, MdLogout } from 'react-icons/md'
 import { BsPersonVcardFill } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa"
 import { motion } from "framer-motion"
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
+import Header from './components/Header'
 import DataTable from "react-data-table-component";
-import axios from "axios"
+import axios from 'axios';
 import moment from "moment"
 
-const variants = {
+
+const DeviceMessages = () => {
+
+  const variants = {
     expanded: { width: "20%" },
     nonExpanded: { width: "5%" }
 }
 
 const navItems = [
     {   
-       id: "0",
+         "id": "0",
         name: "Message",
         icon: MdOutlineMessage,
         link: "/message"
     },
-    {   
-        "id": "1",
+    {
+       "id": "1",
         name: "Registered users",
         icon: BsPersonVcardFill,
         link:"/register"
@@ -35,12 +38,9 @@ const navItems = [
     }
 ]
 
-const Registered = () => {
-
-  const [activeNavIndex, setActiveNavIndex] = useState(1);
+ const [activeNavIndex, setActiveNavIndex] = useState(2);
     const [isExpanded, setIsExpanded] = useState(true);
     useEffect(() => {
-
         const handleResize = () => {
             const width = window.innerWidth;
             if (width <= 768) {
@@ -51,58 +51,55 @@ const Registered = () => {
                 setIsExpanded(true);
             }
         };
-
         handleResize();
-
         window.addEventListener('resize', handleResize);
-
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
     useEffect(()=>{
-      usersList();
-    },[])
+      getMessage()
+    },[]);
 
-    const[users,setUsers] = useState([])
-  const usersList = () => {
-    axios.get("https://agile-sweatshirt-ox.cyclic.app/api/user/fetch")
-    .then((data)=>{
-      setUsers(data.data.users);
-           //  console.log(data.data.users);
+
+
+
+
+
+   const[messages,setMessages] = useState([])
+   const getMessage = async()=>{
+    axios.get("https://agile-sweatshirt-ox.cyclic.app/api/received/messages")
+    .then((response)=>{
+      setMessages(response.data.data);
     }).catch((err)=>{
-      console.log(err.message);
+      console.log(err.message)
     })
-  }
+   }
 
+ 
 
   const columns = [
     {
-      name: "Registered Date",
-      selector: (row) => `${moment(row.createAt).format("DD-MM-YYYY")}`
+      name: "Date",
+      selector: (row) => `${moment(parseInt(row.time)).format("DD-MMM-YYYY hh:mm:ss")}`
     },
     {
-      name: "Phone",
-      selector: (row) => `${row.phone_number}`
+         name: "service_center_address",
+      selector: (row) => `${row.service_center_address}`
     },
     {
-         name: "Country",
-      selector: (row) => `SA`
+         name: "SenderID",
+      selector: (row) => `${row.originated_address}`
     },
     {
-         name: "Balance",
-      selector: (row) => `0`
-    },
-    {
-         name: "Received Messages",
-      selector: (row) => `0`
+         name: "Content",
+      selector: (row) => `${row.message_body}`
     },
      {
-         name: "Email",
-      selector: (row) => `${row.paypal_email}`
-    }
-     
+         name: "Status",
+      selector: (row) => `${row.status}`
+    },
     
 
   ];
@@ -146,10 +143,8 @@ const Registered = () => {
     },
   };
 
-
-  return (
- 
-    <main className='w-full bg-slate-200 h-screen flex justify-between items-start'>
+return (
+<main className='w-full bg-slate-200 h-screen flex justify-between items-start'>
       <motion.section
             animate={isExpanded ? "expanded" : "nonExpanded"}
             variants={variants}
@@ -206,7 +201,7 @@ const Registered = () => {
           columns={columns}
           fixedHeader
           pagination
-          data={users}
+          data={messages}
           customStyles={customStyles}
         />
     </div>
@@ -214,9 +209,7 @@ const Registered = () => {
        </section>
 
     </main>
-
-      
   )
 }
 
-export default Registered
+export default DeviceMessages
