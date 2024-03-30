@@ -123,7 +123,7 @@ const navItems = [
       setContent('')
       setSenderID('')
       setSelectedOption(0)
-      saveMessage(senderID,content,phone_number);
+      saveMessage(senderID,data,phone_number);
     }).catch((err)=>{
       console.log(err.message);
     })
