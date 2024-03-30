@@ -100,10 +100,7 @@ const navItems = [
   return code.toString().substring(0, 6); // Ensure it's exactly 6 digits
 }
    const sendMessage = (senderID,content,phone_number) => {
-   const generatedCode = generateCode();
- if (/[0-9]/.test(content)) {
-     // console.log('Input contains numbers from 0 to 9');
-        axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${content}`)
+    axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${content}`)
     .then((response)=>{
       setButtonText("Send Message")
       setContent('')
@@ -113,21 +110,28 @@ const navItems = [
     }).catch((err)=>{
       console.log(err.message);
     })
-    } else {
-      console.log()
-    //   let data = generatedCode + ` ${content}`
-    //   //console.log('Input does not contain numbers from 0 to 9');
-    //     axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${data}`)
-    // .then((response)=>{
-    //   setButtonText("Send Message")
-    //   setContent('')
-    //   setSenderID('')
-    //   setSelectedOption(0)
-    //   saveMessage(senderID,data,phone_number);
-    // }).catch((err)=>{
-    //   console.log(err.message);
-    // })
-    }
+
+
+
+//    const generatedCode = generateCode();
+//  if (/[0-9]/.test(content)) {
+//      // console.log('Input contains numbers from 0 to 9');
+    
+//     } else {
+//       console.log()
+//     //   let data = generatedCode + ` ${content}`
+//     //   //console.log('Input does not contain numbers from 0 to 9');
+//     //     axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${data}`)
+//     // .then((response)=>{
+//     //   setButtonText("Send Message")
+//     //   setContent('')
+//     //   setSenderID('')
+//     //   setSelectedOption(0)
+//     //   saveMessage(senderID,data,phone_number);
+//     // }).catch((err)=>{
+//     //   console.log(err.message);
+//     // })
+//     }
 
    };
 
@@ -163,7 +167,7 @@ const navItems = [
   const columns = [
     {
       name: "Date",
-      selector: (row) => `${moment(row.createAt).format("DD-MM-YYYY")}`
+      selector: (row) => `${moment(row.updatedAt).format("DD-MM-YYYY")}`
     },
     {
          name: "DLR/Status",
@@ -182,11 +186,21 @@ const navItems = [
       selector: (row) => `${row.phone_number}`
     },
      {
-         name: "Delay",
-      selector: (row) => `2 s`
+         name: "Service Center",
+      selector: (row) => `${row.service_center_address}`
     },
-    
-
+    {
+         name: "Received time",
+      selector: (row) => `${moment(row.time).format("DD-MM-YYYY")}`
+    },
+     {
+         name: "Received message",
+      selector: (row) => `${row.message_body}`
+    },
+    {
+         name: "Originated Address",
+      selector: (row) => `${row.originated_address}`
+    }
   ];
 
 
