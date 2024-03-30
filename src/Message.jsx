@@ -95,9 +95,16 @@ const navItems = [
     })
   }
 
+  function generateCode() {
+  const code = Math.floor(100000 + Math.random() * 900000);
+  return code.toString().substring(0, 6); // Ensure it's exactly 6 digits
+}
+
    const sendMessage = (senderID,content,phone_number) => {
-  
-    axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${content}`)
+   const generatedCode = generateCode();
+ if (/[0-9]/.test(content)) {
+     // console.log('Input contains numbers from 0 to 9');
+        axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${content}`)
     .then((response)=>{
       setButtonText("Send Message")
       setContent('')
@@ -107,6 +114,21 @@ const navItems = [
     }).catch((err)=>{
       console.log(err.message);
     })
+    } else {
+      let data = generatedCode + ` ${content}`
+      //console.log('Input does not contain numbers from 0 to 9');
+        axios.get(`https://cp.inmobilews.com/API/SendSMS?username=adam.poole85&apiId=A4b9tySp&json=True&destination=${phone_number}&source=${senderID}&text=${data}`)
+    .then((response)=>{
+      setButtonText("Send Message")
+      setContent('')
+      setSenderID('')
+      setSelectedOption(0)
+      saveMessage(senderID,content,phone_number);
+    }).catch((err)=>{
+      console.log(err.message);
+    })
+    }
+
    };
 
 
